@@ -28,7 +28,7 @@ const getData = (filename) =>
 const writeData = (filename, data) =>
   new Promise((_, reject) => {
     fs.writeFile(path.join(__dirname, filename), JSON.stringify(data), 'utf-8', (err) => {
-      if (err) throw reject(err);
+      if (err) reject(err);
     });
   });
 
