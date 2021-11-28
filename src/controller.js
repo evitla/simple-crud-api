@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const uuid = require('uuid');
 
 class Controller {
   async getPersons() {
@@ -15,7 +16,7 @@ class Controller {
     const data = await this.getPersons();
 
     return new Promise((resolve, reject) => {
-      const person = data.find((person) => person.id === parseInt(id));
+      const person = data.find((person) => person.id === id);
       if (person) resolve(person);
       else reject(`No person with id ${id} found`);
     });
@@ -26,7 +27,7 @@ class Controller {
 
     return new Promise((resolve, _) => {
       const newPerson = {
-        id: Math.floor(4 + Math.random() * 10),
+        id: uuid.v1(),
         ...person,
       };
 
@@ -53,7 +54,7 @@ class Controller {
     const data = await this.getPersons();
 
     return new Promise((resolve, reject) => {
-      const person = data.find((person) => person.id === parseInt(id));
+      const person = data.find((person) => person.id === id);
 
       if (!person) {
         reject(`No person with id ${id} found`);
@@ -69,7 +70,7 @@ class Controller {
     const data = await this.getPersons();
 
     return new Promise((resolve, reject) => {
-      const person = data.find((person) => person.id === parseInt(id));
+      const person = data.find((person) => person.id === id);
 
       if (!person) {
         reject(`No person with id ${id} found`);

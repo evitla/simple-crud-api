@@ -18,7 +18,12 @@ const server = http.createServer(async (req, res) => {
   }
 
   // /api/person/:id : GET
-  else if (req.url.match(/\/api\/person\/([0-9]+)/) && req.method === 'GET') {
+  else if (
+    req.url.match(
+      /\/api\/person\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/,
+    ) &&
+    req.method === 'GET'
+  ) {
     try {
       const id = req.url.split('/')[3];
       const person = await new Person().getPerson(id);
@@ -32,7 +37,12 @@ const server = http.createServer(async (req, res) => {
   }
 
   // /api/person/:id : DELETE
-  else if (req.url.match(/\/api\/person\/([0-9]+)/) && req.method === 'DELETE') {
+  else if (
+    req.url.match(
+      /\/api\/person\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/,
+    ) &&
+    req.method === 'DELETE'
+  ) {
     try {
       const id = req.url.split('/')[3];
       const message = await new Person().deletePerson(id);
@@ -46,7 +56,12 @@ const server = http.createServer(async (req, res) => {
   }
 
   // /api/person/:id : UPDATE
-  else if (req.url.match(/\/api\/person\/([0-9]+)/) && req.method === 'PUT') {
+  else if (
+    req.url.match(
+      /\/api\/person\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/,
+    ) &&
+    req.method === 'PUT'
+  ) {
     try {
       const id = req.url.split('/')[3];
       const updatedPerson = await new Person().updatePerson(id);

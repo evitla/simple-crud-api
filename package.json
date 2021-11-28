@@ -19,6 +19,7 @@
   "homepage": "https://github.com/evitla/simple-crud-api#readme",
   "dependencies": {
     "dotenv": "^10.0.0",
+    "uuid": "^8.3.2",
     "webpack": "^5.64.4"
   },
   "devDependencies": {
