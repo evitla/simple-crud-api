@@ -5,7 +5,9 @@
   "main": "src/app.js",
   "scripts": {
     "start:dev": "SET NODE_ENV=development && nodemon src/index.js",
-    "start:prod": "webpack && node build/index.js"
+    "start:prod": "webpack && node build/index.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -23,7 +25,9 @@
     "webpack": "^5.64.4"
   },
   "devDependencies": {
+    "jest": "^27.3.1",
     "nodemon": "^2.0.15",
+    "supertest": "^6.1.6",
     "webpack-cli": "^4.9.1"
   }
 }
