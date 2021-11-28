@@ -1,0 +1,25 @@
+{
+  "name": "simple-crud-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "scripts": {
+    "build": "webpack && node build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evitla/simple-crud-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/evitla/simple-crud-api/issues"
+  },
+  "homepage": "https://github.com/evitla/simple-crud-api#readme",
+  "dependencies": {
+    "webpack": "^5.64.4"
+  },
+  "devDependencies": {
+    "webpack-cli": "^4.9.1"
+  }
+}
