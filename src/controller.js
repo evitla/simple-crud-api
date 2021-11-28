@@ -6,12 +6,12 @@ const { getData, writeData } = require('./utils');
 
 class Controller {
   async getPersons() {
-    const data = await getData('./data.json');
-    if (Array.isArray(data.persons)) {
-      return data.persons;
-    } else {
+    const data = await getData('./datas.json');
+    if (!Array.isArray(data.persons)) {
       throw new APIError('INTERNAL SERVER ERROR');
     }
+
+    return data.persons;
   }
 
   async getPerson(id) {
@@ -41,19 +41,19 @@ class Controller {
         );
 
         reject(error);
-      } else {
-        const newPerson = {
-          id: uuid.v1(),
-          ...person,
-        };
-
-        data.push(newPerson);
-        const updatedData = { persons: data };
-
-        writeData('./data.json', updatedData);
-
-        resolve(newPerson);
       }
+
+      const newPerson = {
+        id: uuid.v1(),
+        ...person,
+      };
+
+      data.push(newPerson);
+      const updatedData = { persons: data };
+
+      writeData('./data.json', updatedData);
+
+      resolve(newPerson);
     });
   }
 
