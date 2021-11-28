@@ -12,10 +12,15 @@ const PORT = process.env.PORT || 5000;
 const server = http.createServer(async (req, res) => {
   // /api/person : GET
   if (req.url === '/api/person' && req.method === HTTP_METHODS.GET) {
-    const people = await new Person().getPersons();
+    try {
+      const people = await new Person().getPersons();
 
-    res.writeHead(HTTP_STATUS_CODE.OK, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(people));
+      res.writeHead(HTTP_STATUS_CODE.OK, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(people));
+    } catch (error) {
+      res.writeHead(error.httpCode, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: error.message }));
+    }
   }
 
   // /api/person/:id : GET

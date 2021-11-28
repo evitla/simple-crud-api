@@ -1,11 +1,16 @@
 const uuid = require('uuid');
 
-const { NotFoundError } = require('./custom-errors');
+const { NotFoundError, APIError } = require('./custom-errors');
 const { getData, writeData } = require('./utils');
 
 class Controller {
   async getPersons() {
-    return (await getData('./data.json')).persons;
+    const data = await getData('./data.json');
+    if (Array.isArray(data.persons)) {
+      return data.persons;
+    } else {
+      throw new APIError('INTERNAL SERVER ERROR');
+    }
   }
 
   async getPerson(id) {
