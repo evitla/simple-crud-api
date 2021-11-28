@@ -23,9 +23,9 @@ class Controller {
       if (!person) {
         const error = new NotFoundError(`No person with id '${id}' found`);
         reject(error);
+      } else {
+        resolve(person);
       }
-
-      resolve(person);
     });
   }
 
@@ -41,19 +41,19 @@ class Controller {
         );
 
         reject(error);
+      } else {
+        const newPerson = {
+          id: uuid.v1(),
+          ...person,
+        };
+
+        data.push(newPerson);
+        const updatedData = { persons: data };
+
+        writeData('./data.json', updatedData);
+
+        resolve(newPerson);
       }
-
-      const newPerson = {
-        id: uuid.v1(),
-        ...person,
-      };
-
-      data.push(newPerson);
-      const updatedData = { persons: data };
-
-      writeData('./data.json', updatedData);
-
-      resolve(newPerson);
     });
   }
 
@@ -67,18 +67,18 @@ class Controller {
       if (personIndex === -1) {
         const error = new NotFoundError(`No person with id '${id}' found`);
         reject(error);
+      } else {
+        for (const field in updatedPersonData) {
+          person[field] = updatedPersonData[field];
+        }
+
+        data[personIndex] = person;
+        const updatedData = { persons: data };
+
+        writeData('./data.json', updatedData);
+
+        resolve(person);
       }
-
-      for (const field in updatedPersonData) {
-        person[field] = updatedPersonData[field];
-      }
-
-      data[personIndex] = person;
-      const updatedData = { persons: data };
-
-      writeData('./data.json', updatedData);
-
-      resolve(person);
     });
   }
 
@@ -91,14 +91,14 @@ class Controller {
       if (!person) {
         const error = new NotFoundError(`No person with id '${id}' found`);
         reject(error);
+      } else {
+        const updatedPersons = data.filter((p) => person.id !== p.id);
+        const updatedData = { persons: updatedPersons };
+
+        writeData('./data.json', updatedData);
+
+        resolve('Person deleted successfully');
       }
-
-      const updatedPersons = data.filter((p) => person.id !== p.id);
-      const updatedData = { persons: updatedPersons };
-
-      writeData('./data.json', updatedData);
-
-      resolve('Person deleted successfully');
     });
   }
 }
