@@ -10,8 +10,8 @@ const { getReqData } = require('./utils');
 const PORT = process.env.PORT || 5000;
 
 const server = http.createServer(async (req, res) => {
-  const handleSuccess = (data) => {
-    res.writeHead(HTTP_STATUS_CODE.OK, { 'Content-Type': 'application/json' });
+  const handleSuccess = (data, httpCode = HTTP_STATUS_CODE.OK) => {
+    res.writeHead(httpCode, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(data));
   };
 
@@ -49,7 +49,7 @@ const server = http.createServer(async (req, res) => {
       const id = req.url.split('/')[3];
       const message = await new Person().deletePerson(id);
 
-      handleSuccess(message);
+      handleSuccess(message, HTTP_STATUS_CODE.NO_CONTENT);
     } catch (error) {
       handleError(error);
     }
