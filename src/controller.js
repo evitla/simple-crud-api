@@ -1,13 +1,21 @@
-const data = require('./data');
+const path = require('path');
+const fs = require('fs');
 
 class Controller {
-  async getPeople() {
-    return new Promise((resolve, _) => resolve(data));
+  async getPersons() {
+    return new Promise((resolve, _) => {
+      fs.readFile(path.join(__dirname, 'data.json'), 'utf-8', (err, data) => {
+        if (err) throw err;
+        resolve(JSON.parse(data).persons);
+      });
+    });
   }
 
   async getPerson(id) {
+    const data = await this.getPersons();
+
     return new Promise((resolve, reject) => {
-      let person = data.find((person) => person.id === parseInt(id));
+      const person = data.find((person) => person.id === parseInt(id));
       if (person) resolve(person);
       else reject(`No person with id ${id} found`);
     });
@@ -27,8 +35,10 @@ class Controller {
   }
 
   async updatePerson(id) {
+    const data = await this.getPersons();
+
     return new Promise((resolve, reject) => {
-      let person = data.find((person) => person.id === parseInt(id));
+      const person = data.find((person) => person.id === parseInt(id));
 
       if (!person) {
         reject(`No person with id ${id} found`);
@@ -41,8 +51,10 @@ class Controller {
   }
 
   async deletePerson(id) {
+    const data = await this.getPersons();
+
     return new Promise((resolve, reject) => {
-      let person = data.find((person) => person.id === parseInt(id));
+      const person = data.find((person) => person.id === parseInt(id));
 
       if (!person) {
         reject(`No person with id ${id} found`);

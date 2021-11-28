@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 const server = http.createServer(async (req, res) => {
   // /api/person : GET
   if (req.url === '/api/person' && req.method === 'GET') {
-    const people = await new Person().getPeople();
+    const people = await new Person().getPersons();
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(people));
