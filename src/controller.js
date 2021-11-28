@@ -1,15 +1,10 @@
-const path = require('path');
-const fs = require('fs');
 const uuid = require('uuid');
+
+const { getData, writeData } = require('./utils');
 
 class Controller {
   async getPersons() {
-    return new Promise((resolve, _) => {
-      fs.readFile(path.join(__dirname, 'data.json'), 'utf-8', (err, data) => {
-        if (err) throw err;
-        resolve(JSON.parse(data).persons);
-      });
-    });
+    return (await getData('./data.json')).persons;
   }
 
   async getPerson(id) {
@@ -37,14 +32,7 @@ class Controller {
         persons: data,
       };
 
-      fs.writeFile(
-        path.join(__dirname, 'data.json'),
-        JSON.stringify(updatedData),
-        'utf-8',
-        (err) => {
-          if (err) throw err;
-        },
-      );
+      writeData('./data.json', updatedData);
 
       resolve(newPerson);
     });
@@ -81,14 +69,7 @@ class Controller {
         persons: updatedPersons,
       };
 
-      fs.writeFile(
-        path.join(__dirname, 'data.json'),
-        JSON.stringify(updatedData),
-        'utf-8',
-        (err) => {
-          if (err) throw err;
-        },
-      );
+      writeData('./data.json', updatedData);
 
       resolve('Person deleted successfully');
     });
