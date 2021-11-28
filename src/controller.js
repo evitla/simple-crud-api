@@ -6,7 +6,7 @@ const { getData, writeData } = require('./utils');
 
 class Controller {
   async getPersons() {
-    const data = await getData('./datas.json');
+    const data = await getData('./data.json');
     if (!Array.isArray(data.persons)) {
       throw new APIError('INTERNAL SERVER ERROR');
     }
