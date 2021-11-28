@@ -22,13 +22,28 @@ class Controller {
   }
 
   async createPerson(person) {
+    const data = await this.getPersons();
+
     return new Promise((resolve, _) => {
-      let newPerson = {
+      const newPerson = {
         id: Math.floor(4 + Math.random() * 10),
         ...person,
       };
 
-      console.log(newPerson);
+      data.push(newPerson);
+
+      const updatedData = {
+        persons: data,
+      };
+
+      fs.writeFile(
+        path.join(__dirname, 'data.json'),
+        JSON.stringify(updatedData),
+        'utf-8',
+        (err) => {
+          if (err) throw err;
+        },
+      );
 
       resolve(newPerson);
     });
