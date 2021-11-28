@@ -12,7 +12,10 @@ const HTTP_STATUS_CODE = {
   INTERNAL_SERVER: 500,
 };
 
+const PERSON_FIELDS = ['name', 'age', 'hobbies'];
+
 module.exports = {
   HTTP_METHODS,
   HTTP_STATUS_CODE,
+  PERSON_FIELDS,
 };

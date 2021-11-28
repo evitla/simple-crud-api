@@ -82,12 +82,17 @@ const server = http.createServer(async (req, res) => {
 
   // /api/person : POST
   else if (req.url === '/api/person' && req.method === HTTP_METHODS.POST) {
-    const personData = await getReqData(req);
+    try {
+      const personData = await getReqData(req);
 
-    let person = await new Person().createPerson(JSON.parse(personData));
+      const person = await new Person().createPerson(JSON.parse(personData));
 
-    res.writeHead(HTTP_STATUS_CODE.OK, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(person));
+      res.writeHead(HTTP_STATUS_CODE.OK, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(person));
+    } catch (error) {
+      res.writeHead(error.httpCode, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: error.message }));
+    }
   }
 
   // No route present

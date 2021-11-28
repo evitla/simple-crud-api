@@ -1,4 +1,5 @@
 const uuid = require('uuid');
+const { PERSON_FIELDS, HTTP_STATUS_CODE } = require('./constants');
 
 const { NotFoundError, APIError } = require('./custom-errors');
 const { getData, writeData } = require('./utils');
@@ -20,8 +21,8 @@ class Controller {
       const person = data.find((person) => person.id === id);
 
       if (!person) {
-        const notFoundError = new NotFoundError(`No person with id '${id}' found`);
-        reject(notFoundError);
+        const error = new NotFoundError(`No person with id '${id}' found`);
+        reject(error);
       }
 
       resolve(person);
@@ -31,18 +32,28 @@ class Controller {
   async createPerson(person) {
     const data = await this.getPersons();
 
-    return new Promise((resolve, _) => {
-      const newPerson = {
-        id: uuid.v1(),
-        ...person,
-      };
+    return new Promise((resolve, reject) => {
+      if (!PERSON_FIELDS.every((field) => person.hasOwnProperty(field))) {
+        const error = new APIError(
+          'BAD REQUEST',
+          HTTP_STATUS_CODE.BAD_REQUEST,
+          'Body does not contain required fields',
+        );
 
-      data.push(newPerson);
-      const updatedData = { persons: data };
+        reject(error);
+      } else {
+        const newPerson = {
+          id: uuid.v1(),
+          ...person,
+        };
 
-      writeData('./data.json', updatedData);
+        data.push(newPerson);
+        const updatedData = { persons: data };
 
-      resolve(newPerson);
+        writeData('./data.json', updatedData);
+
+        resolve(newPerson);
+      }
     });
   }
 
@@ -53,8 +64,8 @@ class Controller {
       const person = data.find((person) => person.id === id);
 
       if (!person) {
-        const notFoundError = new NotFoundError(`No person with id '${id}' found`);
-        reject(notFoundError);
+        const error = new NotFoundError(`No person with id '${id}' found`);
+        reject(error);
       }
 
       person.age = 40;
@@ -70,8 +81,8 @@ class Controller {
       const person = data.find((person) => person.id === id);
 
       if (!person) {
-        const notFoundError = new NotFoundError(`No person with id '${id}' found`);
-        reject(notFoundError);
+        const error = new NotFoundError(`No person with id '${id}' found`);
+        reject(error);
       }
 
       const updatedPersons = data.filter((p) => person.id !== p.id);
