@@ -7,8 +7,6 @@ const { HTTP_STATUS_CODE, HTTP_METHODS, urlWithIdRegex } = require('./constants'
 const Person = require('./controller');
 const { getReqData } = require('./utils');
 
-const PORT = process.env.PORT || 5000;
-
 const server = http.createServer(async (req, res) => {
   const handleSuccess = (data, httpCode = HTTP_STATUS_CODE.OK) => {
     res.writeHead(httpCode, { 'Content-Type': 'application/json' });
@@ -86,6 +84,4 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
-  console.log(`server started on port: ${PORT}`);
-});
+module.exports = server;

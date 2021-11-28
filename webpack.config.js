@@ -2,7 +2,7 @@ const path = require('path');
 const { NODE_ENV = 'production' } = process.env;
 
 module.exports = {
-  entry: './src/app.js',
+  entry: './src/index.js',
   mode: NODE_ENV,
   target: 'node',
   output: {
