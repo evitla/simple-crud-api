@@ -57,18 +57,26 @@ class Controller {
     });
   }
 
-  async updatePerson(id) {
+  async updatePerson(id, updatedPersonData) {
     const data = await this.getPersons();
 
     return new Promise((resolve, reject) => {
       const person = data.find((person) => person.id === id);
+      const personIndex = data.findIndex((person) => person.id === id);
 
-      if (!person) {
+      if (personIndex === -1) {
         const error = new NotFoundError(`No person with id '${id}' found`);
         reject(error);
       }
 
-      person.age = 40;
+      for (const field in updatedPersonData) {
+        person[field] = updatedPersonData[field];
+      }
+
+      data[personIndex] = person;
+      const updatedData = { persons: data };
+
+      writeData('./data.json', updatedData);
 
       resolve(person);
     });

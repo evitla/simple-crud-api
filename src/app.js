@@ -70,7 +70,8 @@ const server = http.createServer(async (req, res) => {
   ) {
     try {
       const id = req.url.split('/')[3];
-      const updatedPerson = await new Person().updatePerson(id);
+      const personData = await getReqData(req);
+      const updatedPerson = await new Person().updatePerson(id, JSON.parse(personData));
 
       res.writeHead(HTTP_STATUS_CODE.OK, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(updatedPerson));
