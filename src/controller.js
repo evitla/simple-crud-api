@@ -1,5 +1,6 @@
 const uuid = require('uuid');
 
+const { NotFoundError } = require('./custom-errors');
 const { getData, writeData } = require('./utils');
 
 class Controller {
@@ -12,8 +13,13 @@ class Controller {
 
     return new Promise((resolve, reject) => {
       const person = data.find((person) => person.id === id);
-      if (person) resolve(person);
-      else reject(`No person with id ${id} found`);
+
+      if (!person) {
+        const notFoundError = new NotFoundError(`No person with id '${id}' found`);
+        reject(notFoundError);
+      }
+
+      resolve(person);
     });
   }
 
@@ -27,10 +33,7 @@ class Controller {
       };
 
       data.push(newPerson);
-
-      const updatedData = {
-        persons: data,
-      };
+      const updatedData = { persons: data };
 
       writeData('./data.json', updatedData);
 
@@ -45,7 +48,8 @@ class Controller {
       const person = data.find((person) => person.id === id);
 
       if (!person) {
-        reject(`No person with id ${id} found`);
+        const notFoundError = new NotFoundError(`No person with id '${id}' found`);
+        reject(notFoundError);
       }
 
       person.age = 40;
@@ -61,13 +65,12 @@ class Controller {
       const person = data.find((person) => person.id === id);
 
       if (!person) {
-        reject(`No person with id ${id} found`);
+        const notFoundError = new NotFoundError(`No person with id '${id}' found`);
+        reject(notFoundError);
       }
 
       const updatedPersons = data.filter((p) => person.id !== p.id);
-      const updatedData = {
-        persons: updatedPersons,
-      };
+      const updatedData = { persons: updatedPersons };
 
       writeData('./data.json', updatedData);
 
