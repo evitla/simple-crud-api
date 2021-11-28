@@ -14,8 +14,12 @@ const HTTP_STATUS_CODE = {
 
 const PERSON_FIELDS = ['name', 'age', 'hobbies'];
 
+const urlWithIdRegex =
+  /\/api\/person\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/;
+
 module.exports = {
   HTTP_METHODS,
   HTTP_STATUS_CODE,
   PERSON_FIELDS,
+  urlWithIdRegex,
 };

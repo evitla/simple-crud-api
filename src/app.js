@@ -3,7 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 const http = require('http');
 
-const { HTTP_STATUS_CODE, HTTP_METHODS } = require('./constants');
+const { HTTP_STATUS_CODE, HTTP_METHODS, urlWithIdRegex } = require('./constants');
 const Person = require('./controller');
 const { getReqData } = require('./utils');
 
@@ -32,12 +32,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // /api/person/:id : GET
-  else if (
-    req.url.match(
-      /\/api\/person\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/,
-    ) &&
-    req.method === HTTP_METHODS.GET
-  ) {
+  else if (req.url.match(urlWithIdRegex) && req.method === HTTP_METHODS.GET) {
     try {
       const id = req.url.split('/')[3];
       const person = await new Person().getPerson(id);
@@ -49,12 +44,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // /api/person/:id : DELETE
-  else if (
-    req.url.match(
-      /\/api\/person\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/,
-    ) &&
-    req.method === HTTP_METHODS.DELETE
-  ) {
+  else if (req.url.match(urlWithIdRegex) && req.method === HTTP_METHODS.DELETE) {
     try {
       const id = req.url.split('/')[3];
       const message = await new Person().deletePerson(id);
@@ -66,12 +56,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // /api/person/:id : UPDATE
-  else if (
-    req.url.match(
-      /\/api\/person\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/,
-    ) &&
-    req.method === HTTP_METHODS.PUT
-  ) {
+  else if (req.url.match(urlWithIdRegex) && req.method === HTTP_METHODS.PUT) {
     try {
       const id = req.url.split('/')[3];
       const personData = await getReqData(req);
