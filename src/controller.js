@@ -60,6 +60,20 @@ class Controller {
         reject(`No person with id ${id} found`);
       }
 
+      const updatedPersons = data.filter((p) => person.id !== p.id);
+      const updatedData = {
+        persons: updatedPersons,
+      };
+
+      fs.writeFile(
+        path.join(__dirname, 'data.json'),
+        JSON.stringify(updatedData),
+        'utf-8',
+        (err) => {
+          if (err) throw err;
+        },
+      );
+
       resolve('Person deleted successfully');
     });
   }
