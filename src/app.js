@@ -10,16 +10,24 @@ const { getReqData } = require('./utils');
 const PORT = process.env.PORT || 5000;
 
 const server = http.createServer(async (req, res) => {
+  const handleSuccess = (data) => {
+    res.writeHead(HTTP_STATUS_CODE.OK, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(data));
+  };
+
+  const handleError = (error) => {
+    res.writeHead(error.httpCode, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: error.message }));
+  };
+
   // /api/person : GET
   if (req.url === '/api/person' && req.method === HTTP_METHODS.GET) {
     try {
-      const people = await new Person().getPersons();
+      const persons = await new Person().getPersons();
 
-      res.writeHead(HTTP_STATUS_CODE.OK, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(people));
+      handleSuccess(persons);
     } catch (error) {
-      res.writeHead(error.httpCode, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: error.message }));
+      handleError(error);
     }
   }
 
@@ -34,11 +42,9 @@ const server = http.createServer(async (req, res) => {
       const id = req.url.split('/')[3];
       const person = await new Person().getPerson(id);
 
-      res.writeHead(HTTP_STATUS_CODE.OK, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(person));
+      handleSuccess(person);
     } catch (error) {
-      res.writeHead(error.httpCode, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: error.message }));
+      handleError(error);
     }
   }
 
@@ -53,11 +59,9 @@ const server = http.createServer(async (req, res) => {
       const id = req.url.split('/')[3];
       const message = await new Person().deletePerson(id);
 
-      res.writeHead(HTTP_STATUS_CODE.OK, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(message));
+      handleSuccess(message);
     } catch (error) {
-      res.writeHead(error.httpCode, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: error.message }));
+      handleError(error);
     }
   }
 
@@ -73,11 +77,9 @@ const server = http.createServer(async (req, res) => {
       const personData = await getReqData(req);
       const updatedPerson = await new Person().updatePerson(id, JSON.parse(personData));
 
-      res.writeHead(HTTP_STATUS_CODE.OK, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(updatedPerson));
+      handleSuccess(updatedPerson);
     } catch (error) {
-      res.writeHead(error.httpCode, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: error.message }));
+      handleError(error);
     }
   }
 
@@ -85,21 +87,17 @@ const server = http.createServer(async (req, res) => {
   else if (req.url === '/api/person' && req.method === HTTP_METHODS.POST) {
     try {
       const personData = await getReqData(req);
-
       const person = await new Person().createPerson(JSON.parse(personData));
 
-      res.writeHead(HTTP_STATUS_CODE.OK, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(person));
+      handleSuccess(person);
     } catch (error) {
-      res.writeHead(error.httpCode, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: error.message }));
+      handleError(error);
     }
   }
 
   // No route present
   else {
-    res.writeHead(HTTP_STATUS_CODE.BAD_REQUEST, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'Route not found' }));
+    handleError({ httpCode: HTTP_STATUS_CODE.BAD_REQUEST, message: 'Route not found' });
   }
 });
 
