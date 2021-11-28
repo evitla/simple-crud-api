@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "start:dev": "SET NODE_ENV=development & nodemon src/index.js",
+    "start:dev": "SET NODE_ENV=development && nodemon src/index.js",
     "start:prod": "webpack && node build/index.js"
   },
   "repository": {
